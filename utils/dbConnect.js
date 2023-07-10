@@ -14,7 +14,7 @@ async function connect() {
     serverApi: ServerApiVersion.v1,
   });
 
-  //console.log("URI:", uri);
+  console.log("URI:", uri);
 
   try {
     await client.connect();
