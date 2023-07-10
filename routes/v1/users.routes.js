@@ -6,12 +6,71 @@ const { ObjectId } = require("mongodb");
 //initialize express router
 const router = express.Router();
 
+// post api
+router.post("/user", async (req, res) => {
+  try {
+    const client = db.getClient(); // Use the existing database client
+    const users = client.db("demoCrudAppTask").collection("users");
+    const user = req.body;
+    const result = await users.insertOne(user);
+    res.send(result);
+  } catch (error) {
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+
+
 // get api
 router.get("/users", async (req, res) => {
   try {
     const client = db.getClient(); // Use the existing database client
     const users = client.db("demoCrudAppTask").collection("users");
     const result = await users.find().toArray();
+    res.send(result);
+  } catch (error) {
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+
+// get data by id
+router.get("/user/:id", async (req, res) => {
+  try {
+    const client = db.getClient(); // Use the existing database client
+    const users = client.db("demoCrudAppTask").collection("users");
+    
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) };
+    const result = await users.findOne(query);
+
+    res.send(result);
+  } catch (error) {
+    res.send({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+
+
+// delete a user
+router.delete("/user/:id", async (req, res) => {
+  try {
+    const client = db.getClient(); // Use the existing database client
+    const users = client.db("demoCrudAppTask").collection("users");
+
+    const id = req.params.id;
+    // console.log(id);
+    const query = { _id: new ObjectId(id) };
+    const result = await users.deleteOne(query);
     res.send(result);
   } catch (error) {
     res.send({
